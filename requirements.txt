@@ -1,0 +1,5 @@
+Cython==0.29.14
+PyDispatcher==2.0.5
+pyserial==3.4
+python-openzwave==0.4.19
+six==1.14.0
