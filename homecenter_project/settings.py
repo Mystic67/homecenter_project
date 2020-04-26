@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'homecenter_app.apps.HomecenterAppConfig',
+    'homecenter.apps.HomecenterAppConfig',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'homecenter_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'homecenter_app/templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'homecenter/templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
