@@ -239,3 +239,15 @@ fabric.properties
 /.idea/modules.xml
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/vcs.xml
+
+#zwave
+/zwcfg_*.xml
+/pyozw.sqlite
+/.idea/dataSources.xml
+/homecenter/options.xml
+/options.xml
+/homecenter/zwcfg_0xfbb8d01f.xml
+/homecenter/zwscene.xml
+/zwscene.xml
+/homecenter_db.sqlite3
+/OZW_Log.txt
