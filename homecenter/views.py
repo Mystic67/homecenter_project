@@ -94,5 +94,50 @@ def roller_shutter(request):
         }
         return render(request, 'homecenter/roller_shutter.html', context)
 
+def light(request):
+    light_nodes = Instances.objects.filter(node__product_type__contains="0x020")
+    if zwave.network.is_ready:
+        nw_state = "On"
+    else:
+        nw_state = "Off"
+
+    if request.is_ajax and request.method == 'POST':
+        jsmessages = {}
+        if not zwave.network.is_ready:
+            jsmessages['warning'] = "Le réseau z-wave est à l'arrêt !"
+            data = {
+                'nw_state': nw_state,
+                'messages': jsmessages
+            }
+            return JsonResponse(data)
+        else:
+            node_id = request.POST.get('nodeId')
+            node_instance = request.POST.get('nodeInstance')
+            setState = request.POST.get('setState')
+
+            light = Light(zwave.network, int(node_id), int(node_instance))
+            light_nodes = Instances.objects.get(node_id=node_id, index=node_instance)
+            if not light.is_ready:
+                jsmessages['success'] = "Le modules n'est pas prêt."
+                data = {'messages': messages}
+                return JsonResponse(data)
+            else:
+                print(setState)
+                if setState == "Off":
+                    jsmessages['success'], state = light.set_off()
+                else:
+                    jsmessages['success'], state = light.set_on()
+                light_nodes.state = state
+                light_nodes.save()
+                jsmessages.clear()
+
+                data = {'messages': jsmessages, 'state': state}
+                return JsonResponse(data)
+    else:
+        context = {
+            "nw_state": nw_state,
+            "light_nodes": light_nodes
+        }
+        return render(request, 'homecenter/light.html', context)
 
 
