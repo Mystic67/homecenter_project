@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    {% load static %}
+
+    <title>HomeCenter - {% block title %}Accueil{% endblock %}</title>
+
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/c7479c1946.js" crossorigin="anonymous"></script>
+
+    <!-- Google Material Design Icons -->
+    <link rel="stylesheet" href="//cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
+    <script src="https://code.iconify.design/1/1.0.4/iconify.min.js"></script>
+
+    <!-- Theme CSS - Includes Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Theme CSS - HomeCenter -->
+    <link href="{% static 'homecenter/css/homecenter.css' %}" rel="stylesheet">
+
+    <!-- Django favicon-->
+    <link rel="shortcut icon" type="image/png" href="{% static 'homecenter/img/favico.ico' %}"/>
+
+
+</head>
+<body>
+    <header id="header" class="jumbotron jumbotron-fluid">
+        <div class="container row col-12">
+            <div id="button" class="col-12 col-sm-3 order-3 order-sm-1">
+                <button type="button" id="sidebarCollapse" class="btn bg-transparent">
+                    <i class="fas fa-align-left"></i>
+                    <span>Maison</span>
+                </button>
+            </div>
+            <div id="logo" class="col-2 col-sm-2 text-center text-sm-right order-1 order-sm-2">
+                <img src="{% static 'homecenter/img/HomeCenter.png' %}">
+            </div>
+
+            <div id="title" class="col-10 col-sm-7 text-center text-sm-left order-2 order-sm-3">
+                <h1 class="display-5"><strong>H</strong>ome<strong>C</strong>enter</h1>
+                <p class="">Gardez le contrôle de votre domicile!</p>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Side nav bar -->
+    <div class="wrapper">
+        <nav id="sidebar">
+            <ul class="list-unstyled components">
+
+                <li class="active">
+                    <a href="#home" data-toggle="collapse" aria-expanded="false" class="fa fa-home mdi-24px dropdown-toggle"><i>  Maison</i></a>
+                    <br>
+                    <ul class="collapse list-unstyled" id="home">
+                        <br>
+                        <li>
+                            <a href="{% url 'homecenter:roller_shutter' %}"><span class="iconify mdi-24px align-left" data-icon="mdi-window-shutter" data-inline="false"></span><i>  Volets</i></a>
+                        </li><br>
+                        <li>
+                            <a href="{% url 'homecenter:light' %}"><span class="iconify mdi-24px" data-icon="raphael:lamp-alt" data-inline="false"></span><i>  Lampes</i></a>
+                        </li><br>
+                    </ul>
+                </li>
+                <br>
+
+
+                <br>
+
+                    <a href="#"><i>A propos</i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+        <!-- Page content -->
+    <div id="content" class="row col-12">
+        {% block content %} {% endblock %}
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
+
+    <!-- Custom scripts for store app -->
+    <script src="{% static 'homecenter/js/homecenter.js' %}"></script>
+</body>
+</html>
