@@ -1,0 +1,22 @@
+{% extends 'homecenter/base.html' %}
+{% load static %}
+{% block content %}
+    <div id="network" class="col-12">
+        <div id="messages" class="col-12 text-center mh-40">
+            <p class="message offset-2 col-8 rounded alert alert-info d-none"></p>
+        </div>
+        <div class="text-center mh-40">
+            <img id="network_img"
+                     src="{% get_static_prefix %}homecenter/img/network/z-wave-vector-logo.svg"
+                     alt="network logo">
+        </div>
+        <div id="network_btn" class="text-center mh-40" >
+                <p><i id="nw_text_state">Le réseau est {{ nw_text_state }}</i></p>
+                <form id="range-field" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ state }}" class="" id="nw_input" name="state">
+                </form>
+            <i id="network_switch" class="fas fa-toggle-on fa-rotate-180 mdi-48px switch {{ state }}"></i>
+        </div>
+    </div>
+{% endblock %}
