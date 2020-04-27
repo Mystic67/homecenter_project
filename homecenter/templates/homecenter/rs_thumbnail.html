@@ -1,0 +1,23 @@
+{% load static %}
+<div id="{{ node.node_id }}" class="card col-1">
+    <div class="card-body text-center col-12" >
+        <div class="row col-12">
+            <div id="rs_icon" class="mdi mdi-window-shutter mdi-48px"></div>
+            <div class="col-10 card-title text-center">{{ node.name }} <br>{{ node.location }}</div>
+        </div>
+        <div id='test' class="card-header ">
+            <h5 id="level" class="level"></h5>
+            <div class="slidecontainer">
+                <span id="range-value"></span><br><br>
+                {% csrf_token %}
+                <input type="range" min="0" max="100" value="0" class="slider" id="input" name="range_value">
+                <input type="hidden" value="{{ node.index }}" class="" id="rs_instance" name="light_instance">
+            </div>
+            <div class="row col-12">
+                <i id="btn_open" class="rs-shutter fas fa-arrow-up fa-2x text-left offset-0_5 col-2" aria-hidden="true" title="Ouvrir"></i>
+                <i id="btn_stop" class="rs-shutter fas fa-stop fa-2x text-left offset-2 col-2" aria-hidden="true" title="Arrêter"></i>
+                <i id="btn_close" class="rs-shutter fa fa-arrow-down fa-2x text-right offset-2 col-2" aria-hidden="true" title="Fermer"></i>
+            </div>
+        </div>
+    </div>
+</div>

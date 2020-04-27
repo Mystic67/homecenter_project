@@ -1,0 +1,15 @@
+{% extends 'homecenter/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="col-12">
+        <div id="messages" class="col-12 text-center mh-40">
+            <input type="hidden" class="" name="nw_state" value="{{ nw_state }}">
+            <p class="message offset-2 col-8 rounded alert alert-info d-none"></p>
+        </div>
+        <div class="row">
+        {% for node in roller_shutter_nodes%}
+            {% include 'homecenter/rs_thumbnail.html' %}
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}
