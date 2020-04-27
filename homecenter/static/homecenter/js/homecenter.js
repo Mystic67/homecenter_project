@@ -204,5 +204,38 @@ $(document).ready(function () {
 
     });
 
+    /************************************* Lights commands *****************************************/
+    function update_light_node(setStateElement, setState) {
+        let nodeId = $(setStateElement).parent().parent().parent().attr('id');
+        let nodeInstance = $(setStateElement).parent().find('#light_instance')[0].value;
+        let lightSwitch= $(setStateElement).parent().find('#light_switch');
+        setSwitchPosition($(lightSwitch), setState);
+
+        let data = {
+                    'nodeId': nodeId,
+                    'nodeInstance': nodeInstance,
+                    'setState': setState
+                };
+
+        let lightStateElement = setStateElement.parent().find('.light_state');
+        let lightIcon = $(setStateElement).parent().parent().parent().find('#light_icon');
+        $.ajax({
+                type: "POST",
+                headers: {'X-CSRFToken': csrf_token},
+                url: "",
+                dataType: "json",
+                traditional: true,
+                data: data,
+                success: function (data) {
+                    $(lightStateElement).text(data.state);
+                    $(setStateElement)[0].value = (data.state);
+                    changeElementClass($(lightIcon), data.state, "mdi-yellow");
+                    displayResponseMessage(data);
+                    if (data.nw_state === 'Off'){
+                        setSwitchPosition($(lightSwitch),data.nw_state);
+                    }
+                }
+        });
+    }
 
 });
