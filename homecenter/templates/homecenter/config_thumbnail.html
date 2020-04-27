@@ -1,0 +1,62 @@
+<div class="rs card rounded text-center col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4 ">
+    <div class="card-body text-center col-12">
+        <div class="row col-12">
+            {% if node.type == 'dimmer' %}
+                <div id="icon" class="mdi mdi-window-shutter mdi-48px"></div>
+            {% else %}
+                <div id="light_icon" class="mdi mdi-lightbulb mdi-48px mdi-yellow"></div>
+            {% endif %}
+            <div class="col-10 card-title text-center">{{ node.node.product_name }}</div>
+        </div>
+        <div id='test' class=" card-header">
+
+            <table class="table">
+                <tbody class="text-left form-group">
+                    <tr class="text-left">
+                      <th><label>Id:</label></th>
+                      <td id="node_id">{{ node.node_id }}</td>
+                    </tr>
+                    <tr class="text-left">
+                      <th><label>Instance Id:</label></th>
+                      <td id="instance_id">{{ node.index }}</td>
+                    </tr>
+                    <tr>
+                      <th><label>Fabriquant:</label></th>
+                      <td>{{ node.node.manufacturer_name }}</td>
+                    </tr>
+                        {% csrf_token %}
+                        <tr>
+                            <th><label for="input_name">Nom:</label></th>
+                            <td><input type="text" name="name" maxlength="120" id="input_name"
+                                       class="input_name form-control rounded" placeholder="Porte fenêtre"
+                                       value="{{ node.name }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label for="input_location">Pièce:</label></th>
+                            <td><input type="text" name="location" maxlength="120" id="input_location"
+                                       class="input_location form-control rounded" placeholder="Salon"
+                                       value="{{ node.location }}">
+                            </td>
+                        </tr>
+                        {% if node.type == 'dimmer' %}
+                            <tr class="text-left">
+                              <th><label>Interrupteurs:</label></th>
+                              <td>
+                                <select id="switch_type" value="1" name="switch_type" class="form-control rounded">
+                                  <option value="0">1. interrupteurs monostables</option>
+                                  <option value="1">2. interrupteurs bistables</option>
+                                  <option value="2">3. interrupteur unique monostable</option>
+                                </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th><label>Calibration ?</label></th>
+                              <td class="text-center"><button id="BtnCalibrate" type="button" class="BtnCalibrate btn btn-primary btn-sm">Calibrer</button></td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
