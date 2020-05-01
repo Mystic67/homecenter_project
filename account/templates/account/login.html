@@ -1,0 +1,29 @@
+{% extends 'homecenter/base.html' %}
+{% load static %}
+
+{% block title %}Connection{% endblock %}
+
+{% block content %}
+    <div class="col-12">
+        <div id="" class="col-12 text-center mh-40">
+            {% if form.errors %}
+                {% for error in form.errors.values %}
+                    <p class="message text-center offset-2 col-8 rounded alert alert-danger">{{ error|striptags|safe}}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="row col-12 justify-content-around">
+            <div class="fields">
+                <h2>Connection</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <p>{{ field.label }}{{ field }}</p>
+                    {% endfor %}
+                    <button class="btn btn-primary" type="submit">Me connecter</button><br><br>
+                    <p><a href="{% url 'account:password_reset' %}">J'ai oublié mon mot de passe !</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
