@@ -6,13 +6,21 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
+eventlet = "==0.25.1"
+greenlet = "==0.4.15"
+gunicorn = {extras = ["eventlet"],version = "*"}
 pyserial = "==3.4"
+python-engineio = "==3.12.1"
 python-openzwave = "==0.4.19"
+python-socketio = "==4.5.1"
+pytz = "==2019.3"
+requests = "==2.23.0"
 six = "==1.14.0"
-Django = "*"
-Cython = "==0.29.14"
+Django = "==3.0.4"
+Louie = "==2.0"
 PyDispatcher = "==2.0.5"
-wheel = "*"
+pyOpenSSL = "==19.1.0"
+enum-compat = "*"
 
 [requires]
 python_version = "3.8"
