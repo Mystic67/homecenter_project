@@ -94,6 +94,62 @@ def roller_shutter(request):
         }
         return render(request, 'homecenter/roller_shutter.html', context)
 
+def nodes_config(request):
+    if request.is_ajax and request.method == 'POST':
+        jsmessages = {}
+        if request.POST.get('calibrate') == 'True':
+            if not zwave.network.is_ready:
+                jsmessages['warning'] = "Le réseau z-wave est à l'arrêt !"
+                data = {
+                    'messages': jsmessages
+                }
+                return JsonResponse(data)
+            else:
+                node_id = request.POST.get('node_id')
+                rollershutter = Rollershutter(zwave.network, int(node_id))
+                print("Calibration node: {}".format(node_id))
+                rollershutter.calibrate()
+                jsmessages['success'] = 'La calibration du volet N°{} est terminé'.format(node_id)
+                data = {
+                    'messages': jsmessages
+                }
+        else:
+            instanceForm = InstanceForm(request.POST)
+            if instanceForm.is_valid():
+                node_id = request.POST.get('node_id')
+                node_instance = request.POST.get('node_instance')
+                node_name = instanceForm.cleaned_data.get('name')
+                node_location = instanceForm.cleaned_data.get('location')
+                node = Instances.objects.get(node=node_id, index=node_instance)
+                node.name = node_name
+                node.location = node_location
+                node.save()
+                jsmessages['success'] = "Enregistrement réussi"
+
+                print('node_id: {}\n node_instance: {}\n  node_name: {}\n node_location: {}'.format(node_id,
+                                                                                                    node_instance,
+                                                                                                    node_name,
+                                                                                                    node_location))
+                data = {
+                    "messages": jsmessages
+                }
+                return JsonResponse(data)
+    else:
+        roller_shutter_nodes = Instances.objects.filter(index=1).filter(node__product_type__contains="0x030") \
+            .select_related('node')
+        light_nodes = Instances.objects.filter(node__product_type__contains="0x020").select_related(
+            'node')
+
+        instanceForm = InstanceForm()
+
+        context = {
+            "instanceForm": instanceForm,
+            "roller_shutter_nodes": roller_shutter_nodes,
+            "light_nodes": light_nodes
+        }
+
+        return render(request, 'homecenter/config.html', context)
+
 def light(request):
     light_nodes = Instances.objects.filter(node__product_type__contains="0x020")
     if zwave.network.is_ready:
@@ -139,5 +195,3 @@ def light(request):
             "light_nodes": light_nodes
         }
         return render(request, 'homecenter/light.html', context)
-
-
