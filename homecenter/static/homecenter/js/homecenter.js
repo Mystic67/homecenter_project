@@ -204,6 +204,59 @@ $(document).ready(function () {
 
     });
 
+    /************************************* Nodes configurations *****************************************/
+    $('.input_name, .input_location').keypress(function(event){
+        let key = event.which || event.keyCode;
+        if (key === 13){
+            let nodeId = $(this).parent().parent().parent().find('#node_id').text().trim();
+            let nodeInstance = $(this).parent().parent().parent().find('#instance_id').text().trim();
+            let nodeName = $(this).parent().parent().parent().find('#input_name')[0].value;
+            let nodeLocation = $(this).parent().parent().parent().find('#input_location')[0].value;
+
+            let data = {
+                    'node_id': nodeId,
+                    'node_instance': nodeInstance,
+                    'name': nodeName,
+                    'location': nodeLocation
+                };
+
+            $.ajax({
+                type: "POST",
+                headers: {'X-CSRFToken': csrf_token},
+                url: "",
+                dataType: "json",
+                traditional: true,
+                data: data,
+                success: function (data) {
+                    displayResponseMessage(data);
+                }
+            });
+        }
+    });
+
+    $('.BtnCalibrate').click(function () {
+        let nodeId = parseInt($(this).parent().parent().parent().find( "#node_id").text().trim());
+        let calibrate = 'True';
+        $(this).attr('disabled', true);
+
+        let data = {
+            'node_id': nodeId,
+            "calibrate": calibrate
+        };
+
+        $.ajax({
+            type: "POST",
+            headers: {'X-CSRFToken': csrf_token},
+            url: "",
+            dataType: "json",
+            traditional: true,
+            data: data,
+            success: function (data) {
+                displayResponseMessage(data);
+            }
+        })
+    });
+
     /************************************* Lights commands *****************************************/
     function update_light_node(setStateElement, setState) {
         let nodeId = $(setStateElement).parent().parent().parent().attr('id');
