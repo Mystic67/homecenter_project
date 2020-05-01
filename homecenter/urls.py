@@ -10,5 +10,6 @@ urlpatterns = [
     path('light/', views.light, name='light'),
     path('network/', views.network, name='network'),
     path('roller_shutter/', views.roller_shutter, name='roller_shutter'),
+    path('nodes_config/', views.nodes_config, name='nodes_config'),
     path('admin/', admin.site.urls),
 ]
