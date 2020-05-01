@@ -13,7 +13,6 @@ from openzwave.option import ZWaveOption
 from .db import DB
 from openzwave.network import ZWaveNetwork
 
-
 logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger('openzwave')
@@ -47,7 +46,7 @@ class Zwave:
         if self.network.is_ready:
             print("***** Le réseau est déjà démarré ! *****")
         else:
-            #start_listener()
+            start_listener()
             self.network.start()
 
             # We wait for the network.
@@ -68,5 +67,6 @@ class Zwave:
         if self.network.is_ready:
             print("***** Le réseau est en cours de d'arrêt. Veuillez patienter. *****")
             self.network.stop()
+            stop_listener()
         else:
             print("***** Le réseau est déjà à l'arrêt. *****")
