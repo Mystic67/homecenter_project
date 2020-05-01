@@ -1,0 +1,68 @@
+{% extends 'homecenter/base.html' %}
+{% load static %}
+
+{% block title %}Connection{% endblock %}
+
+{% block content %}
+    <div class="col-12">
+        <div id="messages" class="col-12 text-center mh-40">
+            {% if form.errors%}
+                {% for error in form.errors.values %}
+                    <p class="message text-center offset-2 col-8 rounded alert alert-danger">{{ error|striptags|safe}}</p>
+                {% endfor %}
+            {% endif %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="message text-center offset-2 col-8 rounded alert alert-info">{{ message }}</p>
+                {% endfor %}
+            {% else %}
+                <p class="message text-center offset-2 col-8 rounded alert alert-info d-none"></p>
+            {% endif %}
+        </div>
+        <div id="user_admin_title" class="row col-12 justify-content-around">
+            <div >
+                <h2>Administation des utilisateurs</h2>
+                <hr class="col-4">
+            </div>
+        </div>
+        <div class="row col-12 text-center">
+            <div id="userForm" class="col-6 d-flex justify-content-around mx-auto">
+                <form method="post" action="{% url 'account:user_admin' %}" class="fields">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <p>{{ field.error }}</p>
+                        <p>{{ field.label }} {{ field }}</p>
+                    {% endfor %}
+                    <td><button id="userCreateBtn" type="submit" class="userCreateBtn btn btn-primary btn-sm">Créer l'utilisateur</button></td>
+                </form>
+            </div>
+            <div id='users_table' class="d-flex mx-auto">
+                <table class="table-bordered">
+                    <thead>
+                        <tr class="col-12 text-center">
+                            <th><label>Utilisateur</label></th>
+                            <th><label>E-mail</label></th>
+                            <th><label>Super utilisateur</label></th>
+                            <th><label></label></th>
+                        </tr>
+                    </thead>
+                    <tbody class="col-12 text-center">
+                        {% for user in users %}
+                        <tr id="{{ user.id }}" class="text-center">
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            {% if user.is_superuser %}
+                                <td>Oui</td>
+                            {% else %}
+                                <td>Non</td>
+                            {% endif %}
+                            <td><button id="{{ user.id }}" type="button" class="userDeleteBtn btn btn-primary btn-sm">X</button></td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
