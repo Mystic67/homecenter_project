@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from account.forms import MyLoginView
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from homecenter_project import settings
 
 urlpatterns = [
     path('', MyLoginView.as_view(template_name='account/login.html'), name='login'),
@@ -23,3 +25,6 @@ urlpatterns = [
     path('homecenter/', include('homecenter.urls', namespace='homecenter')),
     path('admin/', admin.site.urls),
 ]
+
+if settings.DEBUG:
+    urlpatterns += staticfiles_urlpatterns()
