@@ -18,11 +18,13 @@ class ListenerThread(Thread):
     """ The listener Tread
     """
 
-    def __init__(self):
+    def __init__(self, _socketio, _app):
         """The constructor"""
         Thread.__init__(self)
         self._stopevent = threading.Event()
         self.connected = False
+        self.socketio = _socketio
+        self.app = _app
 
     def connect(self):
         """Connect to the zwave notifications
@@ -161,13 +163,13 @@ class ListenerThread(Thread):
         logging.info("Arrêt de l'écouteur d'évênement")
 
 
-def start_listener():
+def start_listener(socketio_, app_):
     # def start_listener():
     """Start the listener
     """
     global listener
     if listener is None:
-        listener = ListenerThread()
+        listener = ListenerThread(socketio_, app_)
         # listener = ListenerThread()
         listener.start()
     return listener
