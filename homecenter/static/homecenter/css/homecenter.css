@@ -1,0 +1,371 @@
+#header{
+    position: fixed;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    z-index: 100;
+}
+
+#header img{
+    height: 5em;
+}
+
+#header strong{
+    color: red;
+}
+
+.jumbotron {
+    background: #b8bcbf;
+    background-size: 5em;
+    padding-top: 0.2%;
+    padding-bottom: 0.2%;
+    margin: 0;
+}
+
+.container{
+    align-items:center;
+}
+
+.wrapper {
+    position: fixed;
+    top: 101px;
+    display: flex;
+    width: auto;
+    align-items: stretch;
+    /*margin-top: 200px;*/
+    padding-top: 0;
+    z-index: 2;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
+    background: #b8bcbf;
+    padding: 30px;
+    margin-left: -250px;
+}
+
+#sidebar.active {
+    margin-left: 0;
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    #header h1{
+        font-size: 30px;
+    }
+    #header p{
+        font-size: 15px;
+    }
+    #header img{
+        height: 3em;
+    }
+    #button button{
+        margin: 0;
+        padding: 10px;
+    }
+}
+
+ul{
+    margin: 5px;
+    padding: 0;
+}
+
+li{
+    margin-left: 1em;
+}
+
+h2{
+    font-size: 2rem;
+}
+
+#messages{
+    position: fixed;
+    top: 101px;
+    z-index: 999;
+}
+
+#content{
+    position: absolute;
+    display: flex;
+    min-height: 100vh;
+    overflow: scroll;
+    z-index: 1;
+}
+
+div{
+    margin: 0;
+    padding: 0;
+}
+
+#network_img{
+    max-height: 40vh;
+}
+
+#network span{
+    margin: 100px;
+}
+
+#network div{
+    min-height: 40vh;
+    max-height: 40vh;
+}
+
+.card{
+    margin: 2px;
+    padding: 0;
+    min-width: 350px;
+    max-width: 420px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+.form-group{
+    font-size: 12px;
+}
+
+.form-control{
+    font-size: 12px;
+}
+
+div .card-title{
+    overflow: hidden;
+    display: table-cell;
+    vertical-align:middle;
+}
+
+.card-body img{
+    max-height: 250px;
+    margin: 0;
+    padding: 0;
+}
+.card-body .row{
+    display: table;
+}
+
+.card-header h5{
+    margin: 0;
+    padding: 0;
+    height: 60px;
+    font-size: 100%;
+}
+
+.offset-0_5{
+    width: 4.1666vw;
+}
+
+.btn{
+    margin: 20px;
+}
+
+.btn .mdi::before {
+    position: relative;
+    top: 4px;
+}
+.btn-xs .mdi::before {
+    font-size: 18px;
+    top: 3px;
+}
+.btn-sm .mdi::before {
+    font-size: 18px;
+    top: 3px;
+}
+.dropdown-menu .mdi {
+    width: 18px;
+}
+.dropdown-menu .mdi::before {
+    position: relative;
+    top: 4px;
+    left: -8px;
+}
+.nav .mdi::before {
+    position: relative;
+    top: 4px;
+}
+.navbar .navbar-toggle .mdi::before {
+    position: relative;
+    top: 4px;
+    color: #FFF;
+}
+.breadcrumb .mdi::before {
+    position: relative;
+    top: 4px;
+}
+a:hover {
+    text-decoration: none;
+}
+a:hover span {
+    text-decoration: underline;
+}
+.alert .mdi::before {
+    position: relative;
+    top: 4px;
+    margin-right: 2px;
+}
+.input-group-addon .mdi::before {
+    position: relative;
+    top: 3px;
+}
+.navbar-brand .mdi::before {
+    position: relative;
+    top: 2px;
+    margin-right: 2px;
+}
+.list-group-item .mdi::before {
+    position: relative;
+    top: 3px;
+    left: -3px
+}
+
+
+.mdi-18px { font-size: 18px; }
+.mdi-24px { font-size: 24px; }
+.mdi-36px { font-size: 36px; }
+.mdi-48px { font-size: 48px; }
+.mdi-48px { font-size: 48px; }
+.mdi-64px { font-size: 64px; }
+.mdi-dark { color: rgba(0, 0, 0, 0.54); }
+.mdi-dark.mdi-inactive { color: rgba(0, 0, 0, 0.26); }
+.mdi-light { color: rgb(255, 199, 25); }
+.mdi.mdi-light.mdi-inactive { color: rgba(255, 255, 255, 0.3); }
+.mdi { color: rgb(7, 137, 246); }
+.mdi-yellow { color: rgb(255, 199, 25); }
+
+.mh-10 { max-height: 10vh; }
+.mh-20 { max-height: 20vh; }
+.mh-30 { max-height: 30vh; }
+.mh-40 { max-height: 40vh; }
+.mh-60 { max-height: 60vh; }
+.mh-70 { max-height: 70vh; }
+.mh-80 { max-height: 80vh; }
+.mh-90 { max-height: 90vh; }
+
+.h-10 { min-height: 10vh;
+        max-height: 10vh;}
+.h-20 { min-height: 20vh;
+        max-height: 20vh;}
+.h-30 { min-height: 30vh;
+        max-height: 30vh;}
+.h-40 { min-height: 40vh;
+        max-height: 40vh;}
+.h-50 { min-height: 50vh;
+        max-height: 50vh;}
+.h-60 { min-height: 60vh;
+        max-height: 60vh;}
+.h-70 { min-height: 70vh;
+        max-height: 70vh;}
+.h-80 { min-height: 80vh;
+        max-height: 80vh;}
+.h-90 { min-height: 90vh;
+        max-height: 90vh;}
+.h-100 { min-height: 100vh;
+        max-height: 100vh;}
+
+.fields{
+
+    min-width: 300px;
+    max-width: 300px;
+    padding-top: 10px;
+}
+
+.dropdown-toggle{
+    color: black;
+}
+
+.dropdown-toggle:hover{
+    color: black;
+}
+
+i {
+    size: 12em;
+    color: #313134;
+}
+
+.rs{
+    margin:2px;
+    padding: 0;
+}
+
+.row{
+    margin:0;
+    padding: 0;
+}
+
+hr{
+    border-top: 1px dotted #000000 !important;
+    margin-bottom: 10px !important;
+    margin-top: 10px !important;
+    background-color: rgb(7, 137, 246);
+    height: 2px;
+}
+
+
+#users_table thead, #users_table th{
+    color: white;
+    background-color: rgb(7, 137, 246);
+}
+
+#users_table{
+    margin: 0;
+    padding: 0;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    max-width: 500px;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: rgb(7, 137, 246);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: rgba(7, 137, 246, 0.69);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  box-shadow: 0 0 0 0.2rem rgb(19, 85, 255);
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+  color: #fff;
+  background-color: rgb(19, 85, 255);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color: rgb(19, 85, 255);;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.3);
+}
+
+.userDeleteBtn{
+    margin: 0;
+    padding: 0;
+    width: 20px;
+}
+
+
+
+
+
+
