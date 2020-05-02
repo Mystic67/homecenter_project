@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.http.response import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
@@ -7,7 +7,7 @@ from .models import User
 from .forms import MySignUpForm
 
 
-@login_required(login_url='/')
+@staff_member_required(login_url='/')
 def user_admin(request):
     if request.is_ajax() and request.method == 'POST':
         jsmessages = {}
