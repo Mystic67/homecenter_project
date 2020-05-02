@@ -2,6 +2,25 @@ from sqlite3 import DataError
 
 from homecenter.models import Controller, Node, Params, Instances
 
+
+def update_instance_state(instance_value_id, instance_values):
+    print("Mise à jour des status")
+    print(instance_values)
+    try:
+        instance = Instances.objects.get(value_id=instance_value_id)
+        # post_save.connect(update_instance_state, sender=Instances)
+        if instance_values.label == "Switch":
+            instance.state = instance_values.data
+            instance.save()
+        elif instance_values.label == 'Level':
+            instance.level = instance_values.data
+            instance.save()
+        else:
+            pass
+    except:
+        pass
+
+
 class DB:
     def __init__(self, zwave):
         self.network = zwave.network
