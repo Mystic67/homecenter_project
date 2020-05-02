@@ -12,6 +12,8 @@ from openzwave.object import ZWaveException
 from openzwave.option import ZWaveOption
 from .db import DB
 from openzwave.network import ZWaveNetwork
+from .listener import start_listener, stop_listener
+from socketio_app.views import sio
 
 logging.basicConfig(level=logging.INFO)
 
@@ -46,7 +48,8 @@ class Zwave:
         if self.network.is_ready:
             print("***** Le réseau est déjà démarré ! *****")
         else:
-            start_listener()
+            start_listener(sio, 'homecenter')
+            #start_listener()
             self.network.start()
 
             # We wait for the network.
