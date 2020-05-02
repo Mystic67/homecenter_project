@@ -51,6 +51,7 @@
     </header>
 
     <!-- Side nav bar -->
+    {% if user.is_authenticated%}
     <div class="wrapper">
         <nav id="sidebar">
             <ul class="list-unstyled components">
@@ -69,15 +70,37 @@
                     </ul>
                 </li>
                 <br>
-
-
+                {% if user.is_staff == 1 %}
+                <li class="active">
+                    <a href="#config" data-toggle="collapse"  class="fa fa-gear mdi-24px dropdown-toggle"><i>  Config.</i></a>
+                    <ul class="collapse list-unstyled" id="config">
+                        <br>
+                        <li>
+                            <a href="{% url 'homecenter:nodes_config' %}"><span class="iconify mdi-24px" data-icon="bx:bx-network-chart" data-inline="false"></span><i>  Noeuds</i></a>
+                        </li><br>
+                        <li>
+                            <a href="{% url 'homecenter:network' %}"><span class="iconify mdi-24px" data-icon="simple-icons:z-wave" data-inline="false"></span><i>  Réseau</i></a>
+                        </li><br>
+                        <li>
+                            <a href="{% url 'account:user_admin' %}"><span class="iconify mdi-24px" data-icon="mdi:account-cog" data-inline="false"></span><i>  Utilisateurs</i></a>
+                        </li>
+                    </ul>
+                <br>
+                </li>
+                {% endif %}
                 <br>
 
+                <li>
+                    <h5><u>{{ user }}</u></h5>
+                    <a href="{% url 'account:logout' %}"><span class="iconify mdi-24px" data-icon="mdi-logout" data-inline="false"></span><i>  Déconnection</i></a>
+                </li><br>
+                <li>
                     <a href="#"><i>A propos</i></a>
                 </li>
             </ul>
         </nav>
     </div>
+    {% endif %}
         <!-- Page content -->
     <div id="content" class="row col-12">
         {% block content %} {% endblock %}
@@ -89,7 +112,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
-
+    <!-- Socketio javascript CDN -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
     <!-- Custom scripts for store app -->
     <script src="{% static 'homecenter/js/homecenter.js' %}"></script>
 </body>
