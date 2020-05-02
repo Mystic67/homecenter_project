@@ -1,4 +1,10 @@
 $(document).ready(function () {
+    let content = $('#content');
+    /****************************** Collapse the nemu bar **********************************************/
+    $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+    });
+
     $(content).on('click', function () {
         $('#sidebar').removeClass('active');
     });
@@ -290,5 +296,54 @@ $(document).ready(function () {
                 }
         });
     }
+
+    let light_switch = $('.light_switch');
+    $(light_switch).click(function() {
+        let setStateElement = $(this).parent().parent().find('.light_set_state');
+        let setState = $(this).parent().parent().find('.light_state').text();
+        if (setState === 'Off'){
+            setState = 'On';
+        }
+        else {
+            setState= 'Off';
+        }
+        update_light_node(setStateElement, setState);
+    });
+
+    $("body").on('DOMSubtreeModified', ".light_set_state",function () {
+        let setState = $(this)[0].value;
+        let nodeId = $(this).parent().parent().parent().attr('id');
+        let nodeInstance = $(this).parent().find('#light_instance')[0].value;
+        update_light_node($(this), setState);
+    });
+
+
+    /************************************  User administation commands *************************************/
+    let userDeleteBtn = $('.userDeleteBtn');
+
+    $(userDeleteBtn).click(function() {
+        let userId = $(this).attr('id');
+        let data = {
+            'user_id': userId,
+            'action': 'UserDelete'
+        };
+        $.ajax({
+            type: "POST",
+            headers: {'X-CSRFToken': csrf_token},
+            url: "",
+            dataType: "json",
+            traditional: true,
+            data: data,
+            beforeSend:function(){
+                return confirm("Etes-vous sûr de vouloir supprimer l'utilisateur");
+            },
+            success: function (data) {
+                displayResponseMessage(data);
+                if (data['messages']['success']) {
+                    $('tr#' + userId).remove()
+                }
+            }
+        });
+    });
 
 });
