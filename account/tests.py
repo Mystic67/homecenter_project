@@ -57,6 +57,7 @@ class LoginViewTestCase(TestCase):
         self.assertFalse(user.is_authenticated)
         self.assertEqual(response.status_code, 200)
 
+
 class LogoutViewTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create(username="fake_user", email='fake_mail@email.com')
@@ -76,6 +77,7 @@ class LogoutViewTestCase(TestCase):
         self.assertTrue(user.is_anonymous)
         # Test if redirect after call logout page
         self.assertEqual(response.status_code, 302)
+
 
 class PassWordResetTestCase(TestCase):
     def setUp(self):
@@ -110,7 +112,7 @@ class PassWordResetTestCase(TestCase):
     def test_password_reset_confirm_page_with_uid_and_token_to_get_password_change_form(self):
         self.uid, self.token = self.test_password_reset_page()
         response = self.client.get(reverse('account:password_reset_confirm', kwargs={'uidb64': self.uid,
-                                                                                      'token': self.token}),
+                                                                                     'token': self.token}),
                                    follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.template_name[0], 'account/password_reset_confirm.html')
@@ -123,7 +125,7 @@ class PassWordResetTestCase(TestCase):
         self.test_password_reset_confirm_page_with_uid_and_token_to_get_password_change_form()
         # Post password change page with new password
         response = self.client.post(reverse('account:password_reset_confirm', kwargs={'uidb64': self.uid,
-                                                                                       'token': "set-password"}),
+                                                                                      'token': "set-password"}),
                                     {'new_password1': self.new_password, 'new_password2': self.new_password},
                                     follow=True)
         # Check the reponse page
@@ -139,3 +141,52 @@ class PassWordResetTestCase(TestCase):
         self.assertEqual(response.template_name[0], 'account/password_reset_complete.html')
 
 
+class UserAdminTestCase(TestCase):
+    def setUp(self):
+        # Create superuser
+        self.user_admin = User.objects.create_superuser(username="fake_admin", email='fake_admin_mail@email.com')
+        self.user_admin.set_password('fake_admin_password')
+        self.user_admin.save()
+        # Create simple user
+        self.user = User.objects.create(username="fake_user", email='fake_mail@email.com')
+        self.user.set_password('fake_password')
+        self.user.save()
+        # Instance Client()
+        self.client = Client()
+        # Ajax json data
+        self.Ajax_post_jsonData = {
+            'user_id': self.user.id,
+            'action': 'UserDelete'
+        }
+        self.Ajax_post_success = {'action': 'UserDelete',
+                                  'messages': {'success': "L'utilisateur à été supprimé avec succès !"}}
+        self.Ajax_post_error = {'action': 'UserDelete',
+                                'messages': {'error': "L'utilisateur n'a pas été supprimé ! Erreur: {}"}}
+
+    def test_display_users_administration_view(self):
+        # Test display page if not logged
+        response = self.client.get(reverse('account:user_admin'))
+        self.assertEqual(response.status_code, 302)
+        # Test with superuser logged
+        self.client.force_login(self.user_admin)
+        response = self.client.get(reverse('account:user_admin'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_user(self):
+        # Superuser must be logged
+        self.client.force_login(self.user_admin)
+        response = self.client.post(reverse('account:user_admin'), {'user_id': self.user.id,
+                                                                    'action': 'UserDelete'},
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.Ajax_post_success, response.json())
+
+        response = self.client.post(reverse('account:user_admin'), {'user_id': self.user.id + 1,
+                                                                    'action': 'UserDelete'},
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        self.assertEqual(
+            {'messages': {'error': "L'utilisateur n'a pas été supprimé ! Erreur: User matching query does not exist."},
+             'action': 'UserDelete'},
+            response.json())
+        self.assertEqual(response.status_code, 200)
