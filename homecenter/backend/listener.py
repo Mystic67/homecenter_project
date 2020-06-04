@@ -17,7 +17,6 @@ listener = None
 class ListenerThread(Thread):
     """ The listener Tread
     """
-
     def __init__(self, _socketio, _app):
         """The constructor"""
         Thread.__init__(self)
@@ -49,26 +48,41 @@ class ListenerThread(Thread):
     def join_room_network(self):
         """Join room network
         """
-        dispatcher.connect(self._dispatch_network, ZWaveNetwork.SIGNAL_NETWORK_STARTED)
-        dispatcher.connect(self._dispatch_network, ZWaveNetwork.SIGNAL_NETWORK_RESETTED)
-        dispatcher.connect(self._dispatch_network, ZWaveNetwork.SIGNAL_NETWORK_AWAKED)
-        dispatcher.connect(self._dispatch_network, ZWaveNetwork.SIGNAL_NETWORK_READY)
-        dispatcher.connect(self._dispatch_network, ZWaveNetwork.SIGNAL_NETWORK_STOPPED)
+        dispatcher.connect(self._dispatch_network,
+                           ZWaveNetwork.SIGNAL_NETWORK_STARTED)
+        dispatcher.connect(self._dispatch_network,
+                           ZWaveNetwork.SIGNAL_NETWORK_RESETTED)
+        dispatcher.connect(self._dispatch_network,
+                           ZWaveNetwork.SIGNAL_NETWORK_AWAKED)
+        dispatcher.connect(self._dispatch_network,
+                           ZWaveNetwork.SIGNAL_NETWORK_READY)
+        dispatcher.connect(self._dispatch_network,
+                           ZWaveNetwork.SIGNAL_NETWORK_STOPPED)
         return True
 
     def leave_room_network(self):
         """Leave room network
         """
-        dispatcher.disconnect(self._dispatch_network, ZWaveNetwork.SIGNAL_NETWORK_STARTED)
-        dispatcher.disconnect(self._dispatch_network, ZWaveNetwork.SIGNAL_NETWORK_RESETTED)
-        dispatcher.disconnect(self._dispatch_network, ZWaveNetwork.SIGNAL_NETWORK_AWAKED)
-        dispatcher.disconnect(self._dispatch_network, ZWaveNetwork.SIGNAL_NETWORK_READY)
-        dispatcher.disconnect(self._dispatch_network, ZWaveNetwork.SIGNAL_NETWORK_STOPPED)
+        dispatcher.disconnect(self._dispatch_network,
+                              ZWaveNetwork.SIGNAL_NETWORK_STARTED)
+        dispatcher.disconnect(self._dispatch_network,
+                              ZWaveNetwork.SIGNAL_NETWORK_RESETTED)
+        dispatcher.disconnect(self._dispatch_network,
+                              ZWaveNetwork.SIGNAL_NETWORK_AWAKED)
+        dispatcher.disconnect(self._dispatch_network,
+                              ZWaveNetwork.SIGNAL_NETWORK_READY)
+        dispatcher.disconnect(self._dispatch_network,
+                              ZWaveNetwork.SIGNAL_NETWORK_STOPPED)
         return True
 
     def _dispatch_network(self, network):
-        logging.debug('Notification du réseau OpenZWave : homeid %0.8x (state:%s) - %d noeuds trouvés.' % (
-            network.home_id, network.state, network.nodes_count))
+        """dispatch for netowrk
+        """
+        logging.debug('Notification du réseau OpenZWave : '
+                      'homeid %0.8x (state:%s) - %d noeuds trouvés.' % (
+                          network.home_id, network.state, network.nodes_count))
+        data = {'data': network.to_dict()}
+        self.socketio.emit('network data', data)  # , namespace='/network')
 
     def join_room_node(self):
         """Join room nodes
@@ -103,54 +117,67 @@ class ListenerThread(Thread):
     def _dispatch_values(self, network, node, value):
         """dispatch dispatch for values
         """
-        # with self.app.test_request_context():
         if network is None:
             logging.debug('Notification des valeurs OpenZWave : Pas de réseau.')
         elif node is None:
-            logging.debug('Notification des valeurs OpenZWave : Aucun noeud trouvé.')
-
+            logging.debug('Notification des valeurs OpenZWave : '
+                          'Aucun noeud trouvé.')
         elif value is None:
-            logging.debug('Notification des valeurs OpenZWave : Pas de retour de valeurs.')
+            logging.debug('Notification des valeurs OpenZWave : '
+                          'Pas de retour de valeurs.')
         else:
-            logging.debug('Notification des valeurs OpenZWave : homeid %0.8x - noeud %d - valeur %d.', network.home_id,
-                          node.node_id, value.value_id)
+            logging.debug('Notification des valeurs OpenZWave : '
+                          'homeid %0.8x - noeud %d - valeur %d.',
+                          network.home_id, node.node_id, value.value_id)
             if network.is_ready:
-                logging.info("la valeur '{}' renvoyée par l'instance '{}' du noeud '{}' est: {}".format(value.label,
-                                                                                                        value.instance,
-                                                                                                        value.value_id,
-                                                                                                        value.data))
-
+                logging.info("la valeur '{}' renvoyée par l'instance '{}' du "
+                             "noeud '{}' est: {}".format(value.label,
+                                                         value.instance,
+                                                         value.value_id,
+                                                         value.data))
                 update_instance_state(value.value_id, value)
 
-                data = network.nodes[node.node_id].values[value.value_id].to_dict()
+                data = \
+                    network.nodes[node.node_id].values[value.value_id].to_dict()
+                data["value_id"] = str(value.value_id)
                 if data['label'] == 'Switch':
-                    self.socketio.emit('instance states', {'data': data}, namespace='light')
-                    logging.info("les données de la lampe, envoyé par le serveur sont: \n {}".format(data))
-                else:
-                    self.socketio.emit('instance states', {'data': data}, namespace='roller_shutter')
-                    logging.info("les données du volet,envoyé par le serveur sont: \n {}".format(data))
+                    self.socketio.emit("update light state", {"data": data})
+
+                elif data['label'] == 'Level':
+                    self.socketio.emit("update roller shutter state",
+                                       {"data": data})
+
+                elif data['label'] == 'Power':
+                    self.socketio.emit("update roller shutter power state",
+                                       {"data": data})
 
     def join_room_controller(self):
         """Join room controller
         """
-        dispatcher.connect(self._dispatch_controller, ZWaveController.SIGNAL_CTRL_WAITING)
-        dispatcher.connect(self._dispatch_controller, ZWaveController.SIGNAL_CONTROLLER)
+        dispatcher.connect(self._dispatch_controller,
+                           ZWaveController.SIGNAL_CTRL_WAITING)
+        dispatcher.connect(self._dispatch_controller,
+                           ZWaveController.SIGNAL_CONTROLLER)
         return True
 
     def leave_room_controller(self):
         """Leave room controller
         """
-        dispatcher.disconnect(self._dispatch_controller, ZWaveController.SIGNAL_CTRL_WAITING)
-        dispatcher.disconnect(self._dispatch_controller, ZWaveController.SIGNAL_CONTROLLER)
+        dispatcher.disconnect(self._dispatch_controller,
+                              ZWaveController.SIGNAL_CTRL_WAITING)
+        dispatcher.disconnect(self._dispatch_controller,
+                              ZWaveController.SIGNAL_CONTROLLER)
         return True
 
     def _dispatch_controller(self, state, message, network, controller):
         """dispatch for controller
         """
         if network is None or controller is None:
-            logging.debug('Message du contrôleur OpenZWave : Aucun réseau ou de contrôleur détecté.')
+            logging.debug('Message du contrôleur OpenZWave : '
+                          'Aucun réseau ou de contrôleur détecté.')
         else:
-            logging.debug('Message du contrôleur OpenZWave : état %s - message %s.', state, message)
+            logging.debug('Message du contrôleur OpenZWave : '
+                          'état %s - message %s.', state, message)
 
     def stop(self):
         """Stop the tread
@@ -164,7 +191,6 @@ class ListenerThread(Thread):
 
 
 def start_listener(socketio_, app_):
-    # def start_listener():
     """Start the listener
     """
     global listener
