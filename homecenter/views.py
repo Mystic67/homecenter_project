@@ -54,7 +54,8 @@ def network(request):
 
 @login_required(login_url='/')
 def roller_shutter(request):
-    roller_shutter_nodes = Instances.objects.filter(index=1).filter(node__product_type__contains="0x030")
+    roller_shutter_nodes = Instances.objects.filter(index=1). \
+        filter(node__product_type__contains="0x030")
     if zwave.network.is_ready:
         nw_state = "On"
     else:
@@ -74,21 +75,25 @@ def roller_shutter(request):
             node_id = request.POST.get('node_id')
             setLevel = request.POST.get('setLevel')
             stop = request.POST.get('stop')
+            direction = request.POST.get('direction')
 
             jsmessages.clear()
             rollershutter = Rollershutter(zwave.network, int(node_id))
             if not rollershutter.is_ready:
-                jsmessages['warning'] = "Le modules {} n'est pas prêt.".format(node_id)
+                jsmessages['warning'] = "Le modules {} n'est pas prêt.". \
+                    format(node_id)
                 data = {'messages': jsmessages}
                 return JsonResponse(data)
             else:
                 if int(stop) == 0:
-                    jsmessages['success'], level = rollershutter.set_open_level(int(setLevel))
+                    jsmessages['success'], level = rollershutter. \
+                            set_open_level(int(setLevel))
                 else:
                     if int(stop) == 1:
-                        print(rollershutter.level)
-                        print(rollershutter.infos())
-
+                        if int(direction) == 0:
+                            jsmessages['success'], level = rollershutter.stop(True)
+                        else:
+                            jsmessages['success'], level = rollershutter.stop(False)
                 data = {'messages': jsmessages, 'level': level}
                 return JsonResponse(data)
     else:
@@ -117,10 +122,12 @@ def nodes_config(request):
                 rollershutter = Rollershutter(zwave.network, int(node_id))
                 print("Calibration node: {}".format(node_id))
                 rollershutter.calibrate()
-                jsmessages['success'] = 'La calibration du volet N°{} est terminé'.format(node_id)
+                jsmessages['success'] = 'La calibration du volet N°{} ' \
+                                        'démarre !'.format(node_id)
                 data = {
                     'messages': jsmessages
                 }
+                return JsonResponse(data)
         else:
             instanceForm = InstanceForm(request.POST)
             if instanceForm.is_valid():
@@ -133,20 +140,17 @@ def nodes_config(request):
                 node.location = node_location
                 node.save()
                 jsmessages['success'] = "Enregistrement réussi"
-
-                print('node_id: {}\n node_instance: {}\n  node_name: {}\n node_location: {}'.format(node_id,
-                                                                                                    node_instance,
-                                                                                                    node_name,
-                                                                                                    node_location))
                 data = {
                     "messages": jsmessages
                 }
                 return JsonResponse(data)
     else:
-        roller_shutter_nodes = Instances.objects.filter(index=1).filter(node__product_type__contains="0x030") \
-            .select_related('node')
-        light_nodes = Instances.objects.filter(node__product_type__contains="0x020").select_related(
-            'node')
+        roller_shutter_nodes = Instances.objects.filter(index=1). \
+            filter(node__product_type__contains="0x030"). \
+            select_related('node')
+        light_nodes = Instances.objects. \
+            filter(node__product_type__contains="0x020"). \
+            select_related('node')
 
         instanceForm = InstanceForm()
 
@@ -181,8 +185,9 @@ def light(request):
             node_instance = request.POST.get('nodeInstance')
             setState = request.POST.get('setState')
 
-            light = Light(zwave.network, int(node_id), int(node_instance))
-            light_nodes = Instances.objects.get(node_id=node_id, index=node_instance)
+            light_nodes = Instances.objects.get(node_id=node_id,
+                                                value_id=node_instance)
+            light = Light(zwave.network, int(node_id), int(light_nodes.index))
             if not light.is_ready:
                 jsmessages['success'] = "Le modules n'est pas prêt."
                 data = {'messages': messages}
