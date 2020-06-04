@@ -10,7 +10,7 @@
             <h5 id="light_state" class="light_state d-none">{{ node.state }}</h5>
             <div class="inputcontainer">
                 {% csrf_token %}
-                <input type="hidden" value="{{ node.index }}" class="" id="light_instance" name="light_instance">
+                <input type="hidden" value="{{ node.index }}" class="light_instance" id="{{ node.value_id }}" name="light_instance">
             </div>
             <div class="row col-12">
                 <i id="light_switch" class="fas fa-toggle-on fa-rotate-180 mdi-48px light_switch"></i>
