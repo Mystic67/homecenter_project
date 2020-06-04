@@ -1,5 +1,4 @@
 from sqlite3 import DataError
-
 from homecenter.models import Controller, Node, Params, Instances
 
 
@@ -10,7 +9,10 @@ def update_instance_state(instance_value_id, instance_values):
         instance = Instances.objects.get(value_id=instance_value_id)
         # post_save.connect(update_instance_state, sender=Instances)
         if instance_values.label == "Switch":
-            instance.state = instance_values.data
+            if instance_values.data:
+                instance.state = 'On'
+            else:
+                instance.state = 'Off'
             instance.save()
         elif instance_values.label == 'Level':
             instance.level = instance_values.data
@@ -29,12 +31,13 @@ class DB:
         nodes = self.network.nodes
         controller = self.network.controller
         try:
-            controller, created = Controller.objects.update_or_create(home_id=controller.home_id,
-                                                                      defaults={
-                                                                          'name': controller.node.name,
-                                                                          'product': controller.node.product_name
-                                                                      }
-                                                                      )
+            controller, created = Controller.objects.update_or_create(
+                home_id=controller.home_id,
+                defaults={
+                    'name': controller.node.name,
+                    'product': controller.node.product_name
+                }
+            )
 
             for node_id in nodes:
                 node, created = Node.objects.update_or_create(
@@ -64,8 +67,10 @@ class DB:
                         }
                     )
 
-                for switch_instance, switch_instance_value_id in enumerate(nodes[node_id].get_switches()):
-                    bool_state = self.network.nodes[node_id].get_switch_state(switch_instance_value_id)
+                for switch_instance, switch_instance_value_id in enumerate(
+                        nodes[node_id].get_switches()):
+                    bool_state = self.network.nodes[node_id].get_switch_state(
+                        switch_instance_value_id)
                     if bool_state:
                         str_state = "On"
                     else:
@@ -80,8 +85,10 @@ class DB:
                         }
                     )
 
-                for dimmer_instance, dimmer_instance_value_id in enumerate(nodes[node_id].get_dimmers()):
-                    level = self.network.nodes[node_id].get_dimmer_level(dimmer_instance_value_id)
+                for dimmer_instance, dimmer_instance_value_id in enumerate(
+                        nodes[node_id].get_dimmers()):
+                    level = self.network.nodes[node_id].get_dimmer_level(
+                        dimmer_instance_value_id)
                     instances, created = Instances.objects.update_or_create(
                         node=node,
                         index=dimmer_instance,
