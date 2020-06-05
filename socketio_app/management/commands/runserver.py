@@ -15,7 +15,7 @@ class Command(RunCommand):
             import eventlet
             import eventlet.wsgi
             from homecenter_project.wsgi import application
-            eventlet.wsgi.server(eventlet.listen(('', 8000)), application)
+            eventlet.wsgi.server(eventlet.listen(('', 5000)), application)
         elif sio.async_mode == 'gevent':
             # deploy with gevent
             from gevent import pywsgi
@@ -27,10 +27,10 @@ class Command(RunCommand):
                 websocket = False
             if websocket:
                 pywsgi.WSGIServer(
-                    ('', 8000), application,
+                    ('', 5000), application,
                     handler_class=WebSocketHandler).serve_forever()
             else:
-                pywsgi.WSGIServer(('', 8000), application).serve_forever()
+                pywsgi.WSGIServer(('', 5000), application).serve_forever()
         elif sio.async_mode == 'gevent_uwsgi':
             print('Start the application through the uwsgi server. Example:')
             print('uwsgi --http :5000 --gevent 1000 --http-websockets '
