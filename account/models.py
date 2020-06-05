@@ -3,4 +3,5 @@ from django.db import models
 
 
 class User(AbstractUser):
-    email = models.EmailField(max_length=255, unique=True, verbose_name='Adresse e-mail')
+    email = models.EmailField(max_length=255, unique=True,
+                              verbose_name='Adresse e-mail')
