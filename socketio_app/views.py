@@ -4,7 +4,7 @@ from django.shortcuts import render
 import socketio
 
 # create a Socket.IO server
-sio = socketio.Server(async_mode='threading',
+sio = socketio.Server(async_mode='gevent',
                       # implémente les origines autorisées
                       cors_allowed_origins='*',
                       # décommente pour activer la journalisation
