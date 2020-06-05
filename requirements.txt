@@ -2,12 +2,13 @@ asgiref==3.2.7
 certifi==2020.4.5.1
 cffi==1.14.0
 chardet==3.0.4
-cryptography==2.9
-Cython==0.29.16
+cryptography==2.9.2
+Cython==0.29.19
 Django==3.0.4
 dnspython==1.16.0
 enum-compat==0.0.3
-eventlet==0.25.1
+eventlet==0.25.2
+gevent==20.5.2
 greenlet==0.4.15
 gunicorn==20.0.4
 idna==2.9
@@ -24,4 +25,6 @@ pytz==2019.3
 requests==2.23.0
 six==1.14.0
 sqlparse==0.3.1
-urllib3==1.25.8
+urllib3==1.25.9
+zope.event==4.4
+zope.interface==5.1.0
