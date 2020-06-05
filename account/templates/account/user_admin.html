@@ -56,8 +56,11 @@
                             {% else %}
                                 <td>Non</td>
                             {% endif %}
-                            <td><button id="{{ user.id }}" type="button" class="userDeleteBtn btn btn-primary btn-sm">X</button></td>
-
+                            {% if user.is_superuser and user.is_staff %}
+                                <td></td>
+                            {% else %}
+                                <td><button id="{{ user.id }}" type="button" class="userDeleteBtn btn btn-primary btn-sm">X</button></td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
