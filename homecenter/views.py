@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
@@ -13,7 +13,8 @@ from .forms import InstanceForm
 zwave = Zwave()
 
 
-@staff_member_required(login_url='/')
+@login_required(login_url='/')
+@user_passes_test(lambda u: u.is_superuser)
 def network(request):
     if zwave.network.is_ready:
         switch_state = "On"
@@ -106,7 +107,8 @@ def roller_shutter(request):
         return render(request, 'homecenter/roller_shutter.html', context)
 
 
-@staff_member_required(login_url='/')
+@login_required(login_url='/')
+@user_passes_test(lambda u: u.is_superuser)
 def nodes_config(request):
     if request.is_ajax and request.method == 'POST':
         jsmessages = {}
