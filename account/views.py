@@ -18,7 +18,8 @@ def user_admin(request):
             user.delete()
             jsmessages['success'] = "L'utilisateur à été supprimé avec succès !"
         except Exception as e:
-            jsmessages['error'] = "L'utilisateur n'a pas été supprimé ! Erreur: {}".format(e)
+            jsmessages['error'] = "L'utilisateur n'a pas été supprimé ! " \
+                                  "Erreur: {}".format(e)
         data = {"messages": jsmessages, "action": action}
         return JsonResponse(data)
 
@@ -27,7 +28,8 @@ def user_admin(request):
         users = User.objects.all()
         if form.is_valid():
             form.save(commit=True)
-            messages.success(request, "Le nouvel utilisateur a été créé avec succès !")
+            messages.success(request, "Le nouvel utilisateur a été créé avec "
+                                      "succès !")
             return HttpResponseRedirect(reverse('account:user_admin'))
         else:
             context = {
