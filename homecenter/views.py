@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
@@ -88,13 +87,15 @@ def roller_shutter(request):
             else:
                 if int(stop) == 0:
                     jsmessages['success'], level = rollershutter. \
-                            set_open_level(int(setLevel))
+                        set_open_level(int(setLevel))
                 else:
                     if int(stop) == 1:
                         if int(direction) == 0:
-                            jsmessages['success'], level = rollershutter.stop(True)
+                            jsmessages['success'], level = rollershutter.stop(
+                                True)
                         else:
-                            jsmessages['success'], level = rollershutter.stop(False)
+                            jsmessages['success'], level = rollershutter.stop(
+                                False)
                 data = {'messages': jsmessages, 'level': level}
                 return JsonResponse(data)
     else:
@@ -130,6 +131,26 @@ def nodes_config(request):
                     'messages': jsmessages
                 }
                 return JsonResponse(data)
+
+        elif request.POST.get('type_switch_value'):
+            if not zwave.network.is_ready:
+                jsmessages['warning'] = "Le réseau z-wave est à l'arrêt !"
+                data = {
+                    'messages': jsmessages
+                }
+                return JsonResponse(data)
+            else:
+                node_id = request.POST.get('node_id')
+                type_switch_value = request.POST.get('type_switch_value')
+                rollershutter = Rollershutter(zwave.network, int(node_id))
+                param_message = rollershutter.set_param(14,
+                                                        int(type_switch_value))
+                jsmessages['success'] = param_message
+                data = {
+                    'messages': jsmessages
+                }
+                return JsonResponse(data)
+
         else:
             instanceForm = InstanceForm(request.POST)
             if instanceForm.is_valid():
@@ -195,7 +216,6 @@ def light(request):
                 data = {'messages': messages}
                 return JsonResponse(data)
             else:
-                print(setState)
                 if setState == "Off":
                     jsmessages['success'], state = light.set_off()
                 else:
