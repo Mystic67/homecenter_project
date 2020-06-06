@@ -381,6 +381,28 @@ $(document).ready(function () {
         })
     });
 
+    $('.switch_type').on('change', function(){
+        let nodeId = parseInt($(this).parent().parent().parent().find("#node_id").text().trim());
+        let typeSwitchValue = $(this).val();
+        let data = {
+            'node_id': nodeId,
+            'type_switch_value': typeSwitchValue
+        };
+
+        $.ajax({
+            type: "POST",
+            headers: {'X-CSRFToken': csrf_token},
+            url: "",
+            dataType: "json",
+            traditional: true,
+            data: data,
+            success: function (data) {
+                displayResponseMessage(data);
+            }
+        })
+
+    });
+
     /******************** Lights commands *************************************/
     function update_light_node(light_instance, setState) {
 
