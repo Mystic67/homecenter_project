@@ -10,6 +10,7 @@ sio = socketio.Server(async_mode='gevent',
                       # décommente pour activer la journalisation
                       engineio_logger=True,
                       logger=True,
+                      cookie=False,
                       )
 
 
