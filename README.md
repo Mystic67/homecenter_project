@@ -54,14 +54,19 @@ une première fois le réseau "Z-wave".
    ex: `mkdir Ma_maison`
 2. Aller dans le repertoire que vous venez de créer.  
    ex: `cd Ma_maison`
-2. Installer un outils de création d'environement vituel (pipenv dans notre exemple)  
+3. Installer un outils de création d'environement vituel (pipenv dans notre exemple)
    `pip install pipenv`     
-3. Cloner ou télécharger le repository Git du projet dans le répertoire que vous venez de créer.  
+4. Cloner ou télécharger le repository Git du projet dans le répertoire que vous venez de créer.
    ex: `git clone https://github.com/Mystic67/homecenter_project.git`
-4. Aller dans le repertoire racine du projet.  
+5. Aller dans le repertoire racine du projet.
     `cd /homecenter_project`  (/Ma_maison/homecenter_project)
-5. Créer votre environement virtuel pipenv et installer les dépendances:  
+6. Créer votre environement virtuel pipenv et installer les dépendances:
     `pipenv --three sync`
+
+**Créer la base de données:**
+Depuis votre environnement vituel (pipenv shell)
+1. créer la base de données.
+   ex: `python manage.py migrate`
 
 **Créer l'utilisateur principal de l'application avec les droits "super-utilisateur" et "staff":**
 Depuis votre environnement vituel (pipenv shell)
