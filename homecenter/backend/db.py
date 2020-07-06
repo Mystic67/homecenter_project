@@ -23,6 +23,31 @@ def update_instance_state(instance_value_id, instance_values):
         pass
 
 
+def update_type_switch(node_id, type_switch_value):
+    print('node_id = {}'.format(node_id))
+    print('type_switch = {}'.format(type_switch_value))
+    print('type_switch = {}'.format(type(type_switch_value)))
+    try:
+        param = Params.objects.get(node_param_id= node_id, index=14)
+        print("Le paramètre est :{}".format(param.data))
+        if int(type_switch_value) == 0:
+            string_data = "Momentary switches"
+            param.data = string_data
+            param.save()
+        elif int(type_switch_value) == 1:
+            string_data = "Toggle switches"
+            param.data = string_data
+            param.save()
+        elif int(type_switch_value) == 2:
+            string_data = "Single, momentary switch."
+            param.data = string_data
+            param.save()
+        else:
+            pass
+    except:
+        pass
+
+
 class DB:
     def __init__(self, zwave):
         self.network = zwave.network

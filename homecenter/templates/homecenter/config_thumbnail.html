@@ -47,10 +47,28 @@
                             <tr class="text-left">
                               <th><label>Interrupteurs:</label></th>
                               <td>
-                                <select id="switch_type" value="1" name="switch_type" class="switch_type form-control rounded">
-                                  <option value="0">1. interrupteurs monostables</option>
-                                  <option value="1">2. interrupteurs bistables</option>
-                                  <option value="2">3. interrupteur unique monostable</option>
+                                <select id="switch_type" name="switch_type" class="switch_type form-control rounded">
+                                  <option value="0" {% for type in switch_type %}
+                                                        {% if type.node_param_id == node.node_id %}
+                                                            {%if type.data == "Momentary switches" %}
+                                                                selected
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %} >1. interrupteurs monostables</option>
+                                  <option value="1" {% for type in switch_type %}
+                                                        {% if type.node_param_id == node.node_id %}
+                                                            {% if type.data == "Toggle switches" %}
+                                                                selected
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %} >2. interrupteurs bistables</option>
+                                  <option value="2" {% for type in switch_type %}
+                                                        {% if type.node_param_id == node.node_id %}
+                                                            {% if type.data == "Single, momentary switch." %}
+                                                                selected
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %} >3. interrupteur unique monostable</option>
                                 </select>
                               </td>
                             </tr>

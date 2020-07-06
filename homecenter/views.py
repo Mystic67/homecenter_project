@@ -8,6 +8,7 @@ from .backend.rollershutter import Rollershutter
 from .backend.light import Light
 from .models import Controller, Node, Params, Instances
 from .forms import InstanceForm
+from .backend.db import update_type_switch
 
 zwave = Zwave()
 
@@ -145,6 +146,7 @@ def nodes_config(request):
                 rollershutter = Rollershutter(zwave.network, int(node_id))
                 param_message = rollershutter.set_param(14,
                                                         int(type_switch_value))
+                update_type_switch(node_id, type_switch_value)
                 jsmessages['success'] = param_message
                 data = {
                     'messages': jsmessages
@@ -175,12 +177,17 @@ def nodes_config(request):
             filter(node__product_type__contains="0x020"). \
             select_related('node')
 
+        switch_type = Params.objects.filter(index=14). \
+            filter(node_param__product_type__contains="0x030"). \
+            select_related('node_param')
+
         instanceForm = InstanceForm()
 
         context = {
             "instanceForm": instanceForm,
             "roller_shutter_nodes": roller_shutter_nodes,
-            "light_nodes": light_nodes
+            "light_nodes": light_nodes,
+            "switch_type": switch_type
         }
 
         return render(request, 'homecenter/config.html', context)
