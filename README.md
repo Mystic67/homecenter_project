@@ -24,6 +24,7 @@ au Raspberry Pi 3b.
 Pour la configuration de l'application en production et des serveurs logiciels (NGINX, Supervisor), 
 vous trouverez des modèles de fichier de configuration dans le 
 [dossier de conception technique](https://github.com/Mystic67/homecenter_project/tree/master/doc/Dossier%20de%20conception%20technique%20-%20Projet%20HomeCenter.pdf)
+ainsi qu'au bas de ce document.
    
 **Fonctionnalités générales:**
 L'utilisation de l'application est instinctive, néanmoins vous trouverez des explications 
