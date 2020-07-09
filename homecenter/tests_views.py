@@ -1,8 +1,10 @@
 from unittest import mock
+from unittest.mock import patch
 from django.test import TestCase, Client
 from django.urls import reverse
 
 from account.models import User
+from .backend.rollershutter import Rollershutter
 
 
 def create_users():
@@ -45,7 +47,7 @@ class NetworkViewTestCase(TestCase):
                 reverse('homecenter:network'), {'state': 'On'},
                 HTTP_X_REQUESTED_WITH='XMLHttpRequest'
             )
-
+            self.assertEqual(response.status_code, 200)
             self.assertEqual(
                 response.json(), {
                     'nw_text_state': 'démarré !',
@@ -62,6 +64,7 @@ class NetworkViewTestCase(TestCase):
             response = client.post(reverse('homecenter:network'),
                                    {'state': 'Off'},
                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json(),
                              {'nw_text_state': 'arrêté !',
                               'messages': {
@@ -85,6 +88,40 @@ class RollerShutterViewTestCase(TestCase):
         response = client.get(reverse('homecenter:roller_shutter'))
         self.assertEqual(response.status_code, 200)
 
+    def test_roller_shutter_network_not_ready(self):
+        with mock.patch('homecenter.views.zwave') as zwave_patched:
+            zwave_patched.network.is_ready = False
+            client = Client()
+            client.force_login(self.user)
+            response = client.post(reverse('homecenter:roller_shutter'),
+                                   {'node_id': '2', 'setLevel': 50, 'stop': '0', 'direction': '1'},
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            self.assertEqual(response.json(), {'nw_state': 'Off',
+                                               'messages': {'warning': "Le réseau z-wave est à l'arrêt !"}})
+
+    @mock.patch.object(Rollershutter, 'stop')
+    def test_roller_shutter_stop_direction_0(self, mock_stop):
+        with mock.patch('homecenter.views.zwave') as zwave_patched:
+            zwave_patched.network.is_ready = True
+            client = Client()
+            client.force_login(self.user)
+            mock_stop.return_value = ("Le volet a été stoppé !.", 60)
+            response = client.post(reverse('homecenter:roller_shutter'),
+                                   {'node_id': '2', 'setLevel': 60, 'stop': '1', 'direction': '0'},
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            self.assertEqual(response.json(), {'messages': {'success': 'Le volet a été stoppé !.'}, 'level': 60})
+
+    @mock.patch.object(Rollershutter, 'stop')
+    def test_roller_shutter_stop_direction_1(self, mock_stop):
+        with mock.patch('homecenter.views.zwave') as zwave_patched:
+            zwave_patched.network.is_ready = True
+            client = Client()
+            client.force_login(self.user)
+            mock_stop.return_value = ("Le volet a été stoppé !.", 50)
+            response = client.post(reverse('homecenter:roller_shutter'),
+                                   {'node_id': '2', 'setLevel': 50, 'stop': '1', 'direction': '1'},
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+            self.assertEqual(response.json(), {'messages': {'success': 'Le volet a été stoppé !.'}, 'level': 50})
 
 class NodesConfigViewTestCase(TestCase):
     def setUp(self):
