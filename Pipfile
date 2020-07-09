@@ -16,11 +16,12 @@ pytz = "==2019.3"
 requests = "==2.23.0"
 six = "==1.14.0"
 Django = "==3.0.4"
-Louie = "==2.0"
 PyDispatcher = "==2.0.5"
 pyOpenSSL = "==19.1.0"
 enum-compat = "*"
+coverage = "*"
 gevent = "*"
+asgiref = "*"
 
 [requires]
 python_version = "3.8"
