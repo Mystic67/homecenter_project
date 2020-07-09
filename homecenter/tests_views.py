@@ -1,5 +1,5 @@
 from unittest import mock
-from unittest.mock import patch
+from unittest.mock import patch, PropertyMock
 from django.test import TestCase, Client
 from django.urls import reverse
 
@@ -94,10 +94,15 @@ class RollerShutterViewTestCase(TestCase):
             client = Client()
             client.force_login(self.user)
             response = client.post(reverse('homecenter:roller_shutter'),
-                                   {'node_id': '2', 'setLevel': 50, 'stop': '0', 'direction': '1'},
+                                   {'node_id': '2',
+                                    'setLevel': 50,
+                                    'stop': '0',
+                                    'direction': '1'},
                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-            self.assertEqual(response.json(), {'nw_state': 'Off',
-                                               'messages': {'warning': "Le réseau z-wave est à l'arrêt !"}})
+            self.assertEqual(response.json(),
+                             {'nw_state': 'Off',
+                              'messages': {'warning':
+                                               "Le réseau z-wave est à l'arrêt !"}})
 
     @mock.patch.object(Rollershutter, 'stop')
     def test_roller_shutter_stop_direction_0(self, mock_stop):
@@ -107,9 +112,14 @@ class RollerShutterViewTestCase(TestCase):
             client.force_login(self.user)
             mock_stop.return_value = ("Le volet a été stoppé !.", 60)
             response = client.post(reverse('homecenter:roller_shutter'),
-                                   {'node_id': '2', 'setLevel': 60, 'stop': '1', 'direction': '0'},
+                                   {'node_id': '2',
+                                    'setLevel': 60,
+                                    'stop': '1',
+                                    'direction': '0'},
                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-            self.assertEqual(response.json(), {'messages': {'success': 'Le volet a été stoppé !.'}, 'level': 60})
+            self.assertEqual(response.json(),
+                             {'messages': {'success': 'Le volet a été stoppé !.'},
+                              'level': 60})
 
     @mock.patch.object(Rollershutter, 'stop')
     def test_roller_shutter_stop_direction_1(self, mock_stop):
@@ -119,9 +129,13 @@ class RollerShutterViewTestCase(TestCase):
             client.force_login(self.user)
             mock_stop.return_value = ("Le volet a été stoppé !.", 50)
             response = client.post(reverse('homecenter:roller_shutter'),
-                                   {'node_id': '2', 'setLevel': 50, 'stop': '1', 'direction': '1'},
+                                   {'node_id': '2', 'setLevel': 50,
+                                    'stop': '1', 'direction': '1'},
                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-            self.assertEqual(response.json(), {'messages': {'success': 'Le volet a été stoppé !.'}, 'level': 50})
+            self.assertEqual(response.json(),
+                             {'messages': {'success': 'Le volet a été stoppé !.'},
+                              'level': 50})
+
 
 class NodesConfigViewTestCase(TestCase):
     def setUp(self):
